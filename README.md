@@ -1,5 +1,5 @@
-# NoteTakerVue
-Description: small note taker tool to create your own personal notes using Vue 3, it can:
+# NoteTakerVue📝
+Description: small note taker tool to create your own personal notes using Vue 3 :D, it can:
  - Add new notes
  - Selected and update existing notes
  - Delete selected notes
