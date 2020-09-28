@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full overflow-scroll">
+  <section class="w-full overflow-auto">
     <ul class="grid grid-cols-4">
       <li
         @click="newNote" 
@@ -22,17 +22,17 @@
 </template>
 
 <script>
-import Note from "./Note";
-export default {
-  name: "NoteDashboard",
-  props: {
-    noteList: Array,
-    newNote: Function,
-    onDelete: Function,
-    onSelect: Function
-  },
-  components: {
-    Note,
-  },
-};
+  import Note from "./Note";
+  export default {
+    name: "note-dashboard",
+    props: {
+      noteList: Array,
+      newNote: Function,
+      onDelete: Function,
+      onSelect: Function
+    },
+    components: {
+      Note,
+    },
+  };
 </script>

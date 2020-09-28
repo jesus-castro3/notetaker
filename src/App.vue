@@ -1,13 +1,15 @@
 <template>
   <main class="w-full h-screen flex  justify-between">
-    <NoteDashboard 
+    <!-- App is separated into TWO sections LEFT is the dashboard with all your created notes -->
+    <note-dashboard 
       :newNote="newNote" 
-      :noteList="noteList" 
+      :noteList="state.noteList" 
       :onDelete="onDelete" 
       :onSelect="onSelect" />
-    <NoteEditor 
+    <!-- RIGHT is your NoteEditor were you can either create or save a selected note -->
+    <note-editor 
       :onSave="onSave"
-      :onSubmit="onSubmit" 
+      :onCreate="onCreate" 
       :content="state.content" 
       :name="state.name" 
       @notechange="onChange" 
@@ -16,23 +18,23 @@
 </template>
 
 <script>
-  import { onBeforeMount, reactive, ref } from 'vue';
+  import { onBeforeMount, reactive } from 'vue';
   import NoteDashboard from './components/NoteDashboard';
   import NoteEditor from './components/NoteEditor';
 
   export default {
     name: 'App',
+    // went with using the new Composition API with the setup method
     setup() {
-      const noteList = ref([]);
-
       const state = reactive({
         id: '',
         content: '',
-        name: ''
+        name: '',
+        noteList: []
       });
 
       function onSave() {
-        noteList.value = noteList.value.map((note) => {
+        state.noteList = state.noteList.map((note) => {
           if(note.id == state.id) {
             note.name = state.name;
             note.content =  state.content
@@ -40,37 +42,31 @@
           return note;
         });
         //we save what we currently have to localstorage
-        localStorage.setItem('noteTaker', JSON.stringify(noteList.value));      
+        localStorage.setItem('noteTaker', JSON.stringify(state.noteList));      
       }
 
-      function onSubmit() {
+      function onCreate() {
         if(!state.name.length) return;
-        noteList.value.push({
+        state.noteList.push({
           // In a real world situation we would use a unique id gen. from BE
           // Using Date.now for demo purposes
           id: Date.now(),
           name: state.name,
           content: state.content
         });
-        state.id = '';
-        state.name = '';
-        state.content = '';
+        newNote();
         //we save what we currently have to localstorage
-        localStorage.setItem('noteTaker', JSON.stringify(noteList.value));
+        localStorage.setItem('noteTaker', JSON.stringify(state.noteList));
       }
 
       function onDelete(id) {
-        const noteTakerStringData = localStorage.getItem('noteTaker');
-        const noteTakerList = noteTakerStringData ? JSON.parse(noteTakerStringData) : [];
-        const newNoteList = noteTakerList.filter(note => note.id !== id);
-        noteList.value = newNoteList;
-        localStorage.setItem('noteTaker', JSON.stringify(noteList.value))
+        // we can mutate sins we are working with refs
+        state.noteList = state.noteList.filter(note => note.id !== id);
+        localStorage.setItem('noteTaker', JSON.stringify(state.noteList))
       }
 
       function onSelect(id) {
-        const noteTakerStringData = localStorage.getItem('noteTaker');
-        const noteTakerList = noteTakerStringData ? JSON.parse(noteTakerStringData) : [];
-        const newCurrentNote = noteTakerList.find(note => note.id === id);
+        const newCurrentNote = state.noteList.find(note => note.id === id);
         state.id = newCurrentNote.id;
         state.name = newCurrentNote.name;
         state.content = newCurrentNote.content;
@@ -93,18 +89,17 @@
       onBeforeMount(() => {
         const noteTakerStringData = localStorage.getItem('noteTaker');
         const noteTakerList = noteTakerStringData ? JSON.parse(noteTakerStringData) : [];
-        noteList.value = noteTakerList;
+        state.noteList = noteTakerList;
       });
 
       
       return {
         onSave,
-        onSubmit,
+        onCreate,
         onDelete,
         onSelect,
         onChange,
         newNote,
-        noteList,
         state
       }
     },

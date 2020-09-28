@@ -4,7 +4,7 @@
   >
     <form
       class="flex flex-col h-full w-full shadow-md border-solid border border-yellow-400"
-      @submit.prevent="saveOrSubmit"
+      @submit.prevent="saveOrCreate"
     >
       <input
         class="bg-yellow-200 outline-none p-5 border-b-1 border-gray-600 font-bold"
@@ -28,27 +28,24 @@
 
 <script>
 /* eslint-disable vue/no-mutating-props */
+import { ref, computed } from 'vue';
 export default {
-  name: 'NoteEditor',
+  name: 'note-editor',
   props: {
     onSave: Function,
-    onSubmit: Function,
+    onCreate: Function,
     id: String,
     name: String,
     content: String
   },
-  data() {
+  setup(props) {
+    const submitButton = ref('Create');
+    const submitButtonMessage = computed(() => props.id ? 'Save' : submitButton.value);
+    const saveOrCreate = computed(() => props.id ? props.onSave : props.onCreate)
     return {
-      submitButton: 'Create'
+      submitButtonMessage,
+      saveOrCreate
     }
   },
-  computed: {
-    submitButtonMessage() {
-      return this.id ? 'Save' : this.submitButton
-    },
-    saveOrSubmit() {
-      return this.id ? this.onSave : this.onSubmit
-    }
-  }
 };
 </script>
