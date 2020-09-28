@@ -1,6 +1,7 @@
 <template>
   <main class="w-full h-screen flex  justify-between">
     <NoteDashboard 
+      :newNote="newNote" 
       :noteList="noteList" 
       :onDelete="onDelete" 
       :onSelect="onSelect" />
@@ -83,11 +84,18 @@
         }
       }
 
-       onBeforeMount(() => {
+      function newNote() {
+        state.content = '';
+        state.name = '';
+        state.id = '';
+      }
+
+      onBeforeMount(() => {
         const noteTakerStringData = localStorage.getItem('noteTaker');
         const noteTakerList = noteTakerStringData ? JSON.parse(noteTakerStringData) : [];
         noteList.value = noteTakerList;
       });
+
       
       return {
         onSave,
@@ -95,6 +103,7 @@
         onDelete,
         onSelect,
         onChange,
+        newNote,
         noteList,
         state
       }
