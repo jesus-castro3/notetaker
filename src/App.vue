@@ -22,9 +22,11 @@
   import NoteDashboard from './components/NoteDashboard';
   import NoteEditor from './components/NoteEditor';
 
+  /** Went with using the new Composition API using the reactive state and setup method
+   * replaces the need to declare things into data(), method() etc functionality
+   *  **/
   export default {
     name: 'App',
-    // went with using the new Composition API with the setup method
     setup() {
       const state = reactive({
         id: '',
@@ -60,7 +62,7 @@
       }
 
       function onDelete(id) {
-        // we can mutate sins we are working with refs
+        // we can mutate since we are working with reactivity
         state.noteList = state.noteList.filter(note => note.id !== id);
         localStorage.setItem('noteTaker', JSON.stringify(state.noteList))
       }
