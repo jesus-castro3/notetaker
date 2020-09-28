@@ -1,4 +1,12 @@
-# nodetakervue
+# NoteTakerVue
+Description: small note taker tool to create your own personal notes using Vue 3, it can:
+ - Add new notes
+ - Selected and update existing notes
+ - Delete selected notes
+ 
+## Prerequirements
+- Node 10v or Above
+- NPM
 
 ## Project setup
 ```
