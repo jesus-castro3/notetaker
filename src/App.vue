@@ -1,12 +1,12 @@
 <template>
   <main class="w-full h-screen flex  justify-between">
-    <NoteDashboard :noteList="noteList" :deleteNote="deleteNote" :selectNote="noteSelect" />
-    <NoteEditor :onSubmit="onSubmit" ncontent="defaultvallll" name="default name"/>
+    <NoteDashboard :noteList="noteList" :onDelete="onDelete" :onSelect="onSelect" />
+    <NoteEditor :onSubmit="onSubmit" :content="state.content" :name="state.name" @notechange="onChange"/>
   </main>
 </template>
 
 <script>
-  import { onBeforeMount, ref } from 'vue';
+  import { onBeforeMount, reactive, ref } from 'vue';
   import NoteDashboard from './components/NoteDashboard';
   import NoteEditor from './components/NoteEditor';
 
@@ -14,21 +14,28 @@
     name: 'App',
     setup() {
       const noteList = ref([]);
-      const currentNote = ref({});
-      function onSubmit(name, content) {
-        if(!name.length) return;
+
+      const state = reactive({
+        content: '',
+        name: ''
+      });
+
+      function onSubmit() {
+        if(!state.name.length) return;
         noteList.value.push({
           // In a real world situation we would use a unique id gen. from BE
           // Using Date.now for demo purposes
           id: Date.now(),
-          name,
-          content
+          name: state.name,
+          content: state.content
         });
+        state.name = '';
+        state.content = '';
         //we save what we currently have to localstorage
         localStorage.setItem('noteTaker', JSON.stringify(noteList.value));
       }
 
-      function deleteNote(id) {
+      function onDelete(id) {
         const noteTakerStringData = localStorage.getItem('noteTaker');
         const noteTakerList = noteTakerStringData ? JSON.parse(noteTakerStringData) : [];
         const newNoteList = noteTakerList.filter(note => note.id !== id);
@@ -36,13 +43,22 @@
         localStorage.setItem('noteTaker', JSON.stringify(noteList.value))
       }
 
-      function noteSelect(id) {
+      function onSelect(id) {
         const noteTakerStringData = localStorage.getItem('noteTaker');
         const noteTakerList = noteTakerStringData ? JSON.parse(noteTakerStringData) : [];
         const newCurrentNote = noteTakerList.find(note => note.id === id);
-        currentNote.value = newCurrentNote;
+        state.name = newCurrentNote.name;
+        state.content = newCurrentNote.content;
       }
       
+      function onChange(val, type){
+        if(type === 'name') {
+          state.name = val;
+        } else {
+          state.content = val;
+        }
+      }
+
        onBeforeMount(() => {
         const noteTakerStringData = localStorage.getItem('noteTaker');
         const noteTakerList = noteTakerStringData ? JSON.parse(noteTakerStringData) : [];
@@ -51,10 +67,11 @@
       
       return {
         onSubmit,
-        deleteNote,
+        onDelete,
+        onSelect,
+        onChange,
         noteList,
-        noteSelect,
-        currentNote
+        state
       }
     },
 

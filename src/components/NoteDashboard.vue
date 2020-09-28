@@ -7,7 +7,7 @@
         :key="note.id"
         @click="onSelect(note.id)"
       >
-        <button class="absolute right-0 top-0 p-2 font-bold" @click="onDelete(note.id)">
+        <button class="absolute right-0 top-0 p-2 font-bold" @click.stop="onDelete(note.id)">
           X
         </button>
         <Note :name="note.name" :content="note.content" />
