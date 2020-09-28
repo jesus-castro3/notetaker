@@ -2,7 +2,7 @@
   <section class="w-full overflow-scroll">
     <ul class="grid grid-cols-4">
       <li
-        class="bg-yellow-200 p-2 m-3 w-40 h-40 text-xs relative overflow-auto shadow-lg cursor-pointer hover:border-solid"
+        class="bg-yellow-200 p-2 m-3 w-40 h-40 text-xs relative overflow-hidden shadow-lg cursor-pointer hover:border-solid"
         v-for="note in noteList"
         :key="note.id"
         @click="onSelect(note.id)"

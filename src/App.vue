@@ -1,7 +1,16 @@
 <template>
   <main class="w-full h-screen flex  justify-between">
-    <NoteDashboard :noteList="noteList" :onDelete="onDelete" :onSelect="onSelect" />
-    <NoteEditor :onSubmit="onSubmit" :content="state.content" :name="state.name" @notechange="onChange"/>
+    <NoteDashboard 
+      :noteList="noteList" 
+      :onDelete="onDelete" 
+      :onSelect="onSelect" />
+    <NoteEditor 
+      :onSave="onSave"
+      :onSubmit="onSubmit" 
+      :content="state.content" 
+      :name="state.name" 
+      @notechange="onChange" 
+      :id="state.id"/>
   </main>
 </template>
 
@@ -16,9 +25,22 @@
       const noteList = ref([]);
 
       const state = reactive({
+        id: '',
         content: '',
         name: ''
       });
+
+      function onSave() {
+        noteList.value = noteList.value.map((note) => {
+          if(note.id == state.id) {
+            note.name = state.name;
+            note.content =  state.content
+          }
+          return note;
+        });
+        //we save what we currently have to localstorage
+        localStorage.setItem('noteTaker', JSON.stringify(noteList.value));      
+      }
 
       function onSubmit() {
         if(!state.name.length) return;
@@ -29,6 +51,7 @@
           name: state.name,
           content: state.content
         });
+        state.id = '';
         state.name = '';
         state.content = '';
         //we save what we currently have to localstorage
@@ -47,6 +70,7 @@
         const noteTakerStringData = localStorage.getItem('noteTaker');
         const noteTakerList = noteTakerStringData ? JSON.parse(noteTakerStringData) : [];
         const newCurrentNote = noteTakerList.find(note => note.id === id);
+        state.id = newCurrentNote.id;
         state.name = newCurrentNote.name;
         state.content = newCurrentNote.content;
       }
@@ -66,6 +90,7 @@
       });
       
       return {
+        onSave,
         onSubmit,
         onDelete,
         onSelect,

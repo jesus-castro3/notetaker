@@ -4,10 +4,10 @@
   >
     <form
       class="flex flex-col h-full w-full shadow-md border-solid border border-yellow-400"
-      @submit.prevent="onSubmit"
+      @submit.prevent="saveOrSubmit"
     >
       <input
-        class="bg-yellow-200 outline-none p-5 border-b-1 border-gray-600"
+        class="bg-yellow-200 outline-none p-5 border-b-1 border-gray-600 font-bold"
         placeholder="Title"
         type="text"
         @input="$emit('notechange', $event.target.value, 'name')"
@@ -20,7 +20,7 @@
         :value="content"
       />
       <button class="bg-green-400 text-gray-200 font-bold p-1 hover:bg-green-500" type="submit">
-        Create
+        {{ submitButtonMessage }}
       </button>
     </form>
   </section>
@@ -31,9 +31,24 @@
 export default {
   name: 'NoteEditor',
   props: {
+    onSave: Function,
     onSubmit: Function,
-    content: String,
-    name: String
+    id: String,
+    name: String,
+    content: String
   },
+  data() {
+    return {
+      submitButton: 'Create'
+    }
+  },
+  computed: {
+    submitButtonMessage() {
+      return this.id ? 'Save' : this.submitButton
+    },
+    saveOrSubmit() {
+      return this.id ? this.onSave : this.onSubmit
+    }
+  }
 };
 </script>
