@@ -1,13 +1,13 @@
 <template>
   <section class="w-full overflow-auto">
-    <ul class="grid grid-cols-4">
+    <ul class="grid xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
       <li
         @click="newNote" 
-        class="flex align-center justify-center items-center bg-gray-200 p-2 m-3 w-40 h-40 text-xs relative overflow-hidden shadow-lg cursor-pointer border-gray-400 border">
-        <span class="text-6xl font-bold text-gray-600">+</span>
+        class="relative flex justify-center items-center bg-gray-200 p-2 m-3 w-40 h-40 shadow-lg cursor-pointer border-gray-400 border">
+        <span role="logo" class="text-6xl font-bold text-gray-600">+</span>
       </li>
       <li
-        class="bg-yellow-200 p-2 m-3 w-40 h-40 text-xs relative overflow-hidden shadow-lg cursor-pointer"
+        class="relative  p-2 m-3 w-40 h-40 overflow-hidden bg-yellow-200 text-xs shadow-lg cursor-pointer"
         v-for="note in noteList"
         :key="note.id"
         @click="onSelect(note.id)"

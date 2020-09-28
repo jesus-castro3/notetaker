@@ -6,20 +6,24 @@
       class="flex flex-col h-full w-full shadow-md border-solid border border-yellow-400"
       @submit.prevent="saveOrCreate"
     >
+      <label class="sr-only" for="name-input">Name: </label>
       <input
-        class="bg-yellow-200 outline-none p-5 border-b-1 border-gray-600 font-bold"
+        name="name-input"
+        class="p-5 border-b-1 font-bold bg-yellow-200 outline-none border-gray-600"
         placeholder="Title"
         type="text"
         @input="$emit('notechange', $event.target.value, 'name')"
         :value="name"
       />
+      <label class="sr-only" for="content-input">Content: </label>
       <textarea
-        class="bg-yellow-200 outline-none h-full px-5"
+        name="content-input"
+        class="h-full px-5 bg-yellow-200 outline-none"
         placeholder="Content"
         @input="$emit('notechange', $event.target.value, 'content')"
         :value="content"
       />
-      <button class="bg-green-400 text-gray-200 font-bold p-1 hover:bg-green-500" type="submit">
+      <button type="submit" class="p-1 font-bold bg-green-400 text-gray-200 hover:bg-green-500">
         {{ submitButtonMessage }}
       </button>
     </form>
@@ -42,10 +46,12 @@ export default {
     const submitButton = ref('Create');
     const submitButtonMessage = computed(() => props.id ? 'Save' : submitButton.value);
     const saveOrCreate = computed(() => props.id ? props.onSave : props.onCreate)
+
     return {
       submitButtonMessage,
       saveOrCreate
     }
+
   },
 };
 </script>

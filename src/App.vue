@@ -1,5 +1,5 @@
 <template>
-  <main class="w-full h-screen flex  justify-between">
+  <main class="flex justify-between w-full h-screen">
     <!-- App is separated into TWO sections LEFT is the dashboard with all your created notes -->
     <note-dashboard 
       :newNote="newNote" 
